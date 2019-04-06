@@ -20,20 +20,32 @@
       </Sider>
       <Layout>
         <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"></Header>
-        <Content :style="{padding: '16px'}">
-          <Row>
-            <Col span="4" v-for="(item,key) in resumeList" :key="key">
-              <Card style="width:100%">
-                <div style="text-align:center">
-                  <img src="../assets/logo.png" style="height:30px;">
-                  <h3>{{item.title}}</h3>
-                </div>
-              </Card>
-            </Col>
-          </Row>
-          <Card>
-            <div style="min-height: 400px">Content</div>
-          </Card>
+        <Content class="lay-content">
+          <div class="lay-content-right">
+            <Affix :offset-top="80" class="lay-content-affix">
+              <Timeline>
+                <TimelineItem color="green">发布1.0版本</TimelineItem>
+                <TimelineItem color="green">发布2.0版本</TimelineItem>
+                <TimelineItem color="red">严重故障</TimelineItem>
+                <TimelineItem color="blue">发布3.0版本</TimelineItem>
+              </Timeline>
+            </Affix>
+          </div>
+          <div class="lay-content-aritcle">
+            <Row>
+              <Col span="4" v-for="(item,key) in resumeList" :key="key">
+                <Card style="width:100%">
+                  <div style="text-align:center">
+                    <img src="../assets/logo.png" style="height:30px;">
+                    <h3>{{item.title}}</h3>
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+            <div>
+              <reForm></reForm>
+            </div>
+          </div>
         </Content>
       </Layout>
     </Layout>
@@ -41,7 +53,9 @@
 </template>
 
 <script>
+import reForm from "../components/form";
 export default {
+  components: { reForm },
   data() {
     return {
       isCollapsed: true,
@@ -71,6 +85,11 @@ export default {
     menuitemClasses: function() {
       return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     }
+  },
+  mounted() {
+    // this.$http.get("data/basic.json").then(res => {
+    // console.log("json数据为:", res.body);
+    // });
   }
 };
 </script>
@@ -115,5 +134,22 @@ export default {
   font-size: 20px;
   font-weight: 800;
   color: #ffffff;
+}
+.lay-content {
+  position: relative;
+  padding: 16px;
+  width: 100%;
+  &-right {
+    float: right;
+    width: 180px;
+    overflow: hidden;
+    padding-left: 30px;
+  }
+  &-aritcle {
+    margin-right: 180px;
+  }
+  &-affix {
+    z-index: 99;
+  }
 }
 </style>

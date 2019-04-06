@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Book from "./views/Book.vue";
 
 Vue.use(Router);
 
@@ -10,6 +11,11 @@ export default new Router({
   routes: [
     {
       path: "/",
+      name: "book",
+      component: Book
+    },
+    {
+      path: "/home",
       name: "home",
       component: Home
     },
