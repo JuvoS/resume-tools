@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-show="dataInfo=='basic' || dataInfo =='all'">basic Info</div>
+    <div v-show="dataInfo=='basic' || dataInfo =='all'">
+      basic Info
+      <div v-for="(value, key) in basicInfo" :key="key">{{ key }} - {{ value }}</div>
+    </div>
     <div v-show="dataInfo=='skill' || dataInfo =='all'">skill Info</div>
     <div v-show="dataInfo=='work' || dataInfo =='all'">work Info</div>
     <div v-show="dataInfo=='project' || dataInfo =='all'">project Info</div>
@@ -15,10 +18,17 @@ export default {
     dataInfo: {
       type: String,
       default: "all"
+    },
+    basicInfo: {
+      type: Object,
+      default: () => {}
     }
   },
   watch: {
     dataInfo(v) {
+      console.log(v);
+    },
+    basicInfo(v) {
       console.log(v);
     }
   }

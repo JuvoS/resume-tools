@@ -1,7 +1,7 @@
 <template>
   <div class="book">
     <div class="book-content" id="bookContent">
-      <con-form :dataInfo="dataInfo"></con-form>
+      <con-form :dataInfo="dataInfo" :basicInfo="basicInfo"></con-form>
     </div>
     <div class="book-footer">
       <div class="book-footer-menu">
@@ -18,11 +18,11 @@
         <a class="book-footer-menu-item" @click="onDraClick('basic')">
           <Icon color="#00ff00" size="18" type="ios-checkmark-circle-outline"/>基本信息
         </a>
-        <div class="book-footer-menu-item">个人技能</div>
-        <div class="book-footer-menu-item">工作经历</div>
-        <div class="book-footer-menu-item">项目经验</div>
-        <div class="book-footer-menu-item">奖项荣誉</div>
-        <div class="book-footer-menu-item">自我评价</div>
+        <div class="book-footer-menu-item" @click="onDraClick('skill')">个人技能</div>
+        <div class="book-footer-menu-item" @click="onDraClick('work')">工作经历</div>
+        <div class="book-footer-menu-item" @click="onDraClick('project')">项目经验</div>
+        <div class="book-footer-menu-item" @click="onDraClick('prize')">奖项荣誉</div>
+        <div class="book-footer-menu-item" @click="onDraClick('eval')">自我评价</div>
       </div>
       <div class="book-footer-bar">
         <a class="book-footer-btn">模板选择</a>
@@ -34,18 +34,37 @@
         </a>
       </div>
     </div>
-    <Drawer :title="draTitle" v-model="draState"></Drawer>
+    <Drawer :title="draTitle" v-model="draState" width="400" :mask="false">
+      <div class="drawer-form">
+        <div v-show="dataInfo=='basic' || dataInfo =='all'">
+          <basic-info :initInfo="basicInfo" @info-out="onBasicInfo"></basic-info>
+        </div>
+        <div v-show="dataInfo=='skill' || dataInfo =='all'">
+          <skill-info :initInfo="skillInfo" @info-out="onSkillInfo"></skill-info>
+        </div>
+        <div v-show="dataInfo=='work' || dataInfo =='all'">work Info</div>
+        <div v-show="dataInfo=='project' || dataInfo =='all'">project Info</div>
+        <div v-show="dataInfo=='prize' || dataInfo =='all'">prize Info</div>
+        <div v-show="dataInfo=='eval' || dataInfo =='all'">evaluate Info</div>
+      </div>
+      <div class="drawer-footer">
+        <Button style="margin-right: 8px" @click="value3 = false">Cancel</Button>
+        <Button type="primary" @click="value3 = false">Submit</Button>
+      </div>
+    </Drawer>
   </div>
 </template>
 
 <script>
 import ColorPaint from "../components/colorPaint";
 import ConForm from "../components/conForm";
+import BasicInfo from "../components/conForm/basic";
+import SkillInfo from "../components/conForm/skill";
 export default {
-  components: { ColorPaint, ConForm },
+  components: { ColorPaint, ConForm, BasicInfo },
   data() {
     return {
-      colorState: true,
+      colorState: false,
       draTitle: "Basic Drawer",
       draState: false,
       basicData: {
@@ -54,7 +73,9 @@ export default {
         both: "1995.09.02"
       },
       dataInfo: "all",
-      htmlTitle: "qwerdf" //这个是pdf文件的名字
+      htmlTitle: "qwerdf", //这个是pdf文件的名字
+      basicInfo: {},
+      skillInfo: {}
     };
   },
   watch: {
@@ -67,6 +88,12 @@ export default {
       this.draState = !this.draState;
       this.draTitle = v;
       this.dataInfo = v;
+    },
+    onBasicInfo(v) {
+      this.basicInfo = v;
+    },
+    onSkillInfo(v) {
+      this.skillInfo = v;
     }
   }
 };
@@ -142,5 +169,20 @@ export default {
   position: absolute;
   bottom: 45px;
   left: 10px;
+}
+.drawer-form {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.drawer-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid #e8e8e8;
+  padding: 10px 16px;
+  text-align: right;
+  background: #fff;
 }
 </style>
