@@ -42,7 +42,9 @@
         <div v-show="dataInfo=='skill' || dataInfo =='all'">
           <skill-info :initInfo="skillInfo" @info-out="onSkillInfo"></skill-info>
         </div>
-        <div v-show="dataInfo=='work' || dataInfo =='all'">work Info</div>
+        <div v-show="dataInfo=='work' || dataInfo =='all'">
+          <work-info :initInfo="workInfo" @info-out="onWorkInfo"></work-info>
+        </div>
         <div v-show="dataInfo=='project' || dataInfo =='all'">project Info</div>
         <div v-show="dataInfo=='prize' || dataInfo =='all'">prize Info</div>
         <div v-show="dataInfo=='eval' || dataInfo =='all'">evaluate Info</div>
@@ -60,10 +62,13 @@ import ColorPaint from "../components/colorPaint";
 import ConForm from "../components/conForm";
 import BasicInfo from "../components/conForm/basic";
 import SkillInfo from "../components/conForm/skill";
+import WorkInfo from "../components/conForm/work";
+import localForage from "localforage";
 export default {
-  components: { ColorPaint, ConForm, BasicInfo },
+  components: { ColorPaint, ConForm, BasicInfo, SkillInfo, WorkInfo },
   data() {
     return {
+      lforage: undefined,
       colorState: false,
       draTitle: "Basic Drawer",
       draState: false,
@@ -75,7 +80,8 @@ export default {
       dataInfo: "all",
       htmlTitle: "qwerdf", //这个是pdf文件的名字
       basicInfo: {},
-      skillInfo: {}
+      skillInfo: {},
+      workInfo: []
     };
   },
   watch: {
@@ -83,7 +89,23 @@ export default {
       if (!v) return (this.dataInfo = "all");
     }
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      this.lforage = localForage.createInstance({
+        name: "resume"
+      });
+      this.lforage.getItem("basic").then(res => {
+        console.log("getItem", res);
+        this.basicInfo = res;
+      });
+      this.lforage.getItem("work").then(res => {
+        console.log("getItem", res);
+        this.workInfo = res;
+      });
+    },
     onDraClick(v) {
       this.draState = !this.draState;
       this.draTitle = v;
@@ -91,9 +113,18 @@ export default {
     },
     onBasicInfo(v) {
       this.basicInfo = v;
+      this.lforage.setItem("basic", v).then(res => {
+        this.$Message.success("更新基本信息成功");
+      });
     },
     onSkillInfo(v) {
       this.skillInfo = v;
+    },
+    onWorkInfo(v) {
+      this.workInfo = v;
+      this.lforage.setItem("work", v).then(res => {
+        this.$Message.success("更新工作经历成功");
+      });
     }
   }
 };

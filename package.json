@@ -13,6 +13,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^3.3.3",
     "jspdf": "^1.5.3",
+    "localforage": "^1.7.3",
     "vue": "^2.6.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
